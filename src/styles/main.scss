@@ -1,0 +1,124 @@
+$lightgray: #EDEDED;
+$darkblue: #28687D;
+$red: #e61408;
+
+body {
+  background: white;
+  font: 13px 'Lato';
+  margin: 0 auto;
+  width: 350px;
+}
+
+h1 {
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  outline: none;
+  &:active {
+    position: relative;
+    top: 2px;
+  }
+}
+
+.action {
+  text-align: center;
+  button {
+    background: $darkblue;
+    border: 1px solid $darkblue;
+    border-radius: 3px;
+    color: white;
+    padding: 0.5em 1em;
+    font-size: 120%;
+    outline: none;
+  }
+}
+
+#intro {
+  display: none;
+}
+
+#preface {
+  display: none;
+}
+
+#tachistoscope {
+  #card {
+    text-align: center;
+  }
+
+  #progress {
+    color: gray;
+    padding-bottom: 1em;
+    text-align: center;
+  }
+
+  #response {
+    text-align: center;
+    .prompt {
+      font-size: 115%;
+      margin-bottom: 2em;
+    }
+    .option {
+      margin: 0.5em 0;
+      + .option {
+        border-top: 1px solid $lightgray;
+        margin-top: 1em;
+        padding-top: 1em;
+      }
+    }
+    [data-value="unknown"] {
+      background: gray;
+      border: 1px solid gray;
+      border-radius: 2px;
+      color: white;
+      font-size: 12px;
+      padding: 0.3em 0.7em;
+    }
+    [data-value="none"] {
+      background: lightgray;
+      border: 1px solid lightgray;
+      border-radius: 2px;
+      font-size: 12px;
+      margin-top: 0.5em;
+      padding: 0.3em 0.7em;
+    }
+    .card-group {
+      + .card-group {
+        margin-top: 0.5em;
+      }
+    }
+    .card-opt {
+      background: no-repeat right/15px;
+      font-weight: bold;
+      font-size: 17px;
+      padding-right: 17px;
+      border-width: 0;
+      width: 35px;
+      + .card-opt {
+        margin-left: 1em;
+      }
+    }
+    .card-opt[data-suit="hearts"], .card-opt[data-suit="diamonds"] {
+      color: $red;
+    }
+    .card-opt[data-suit="spades"] {
+      background-image: url('../images/spades.png');
+    }
+    .card-opt[data-suit="clubs"] {
+      background-image: url('../images/clubs.png');
+    }
+    .card-opt[data-suit="hearts"] {
+      background-image: url('../images/hearts.png');
+    }
+    .card-opt[data-suit="diamonds"] {
+      background-image: url('../images/diamonds.png');
+    }
+  }
+}
+
+footer {
+  margin-top: 1em;
+  text-align: right;
+}
