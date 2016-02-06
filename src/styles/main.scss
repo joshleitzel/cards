@@ -39,11 +39,8 @@ button {
   display: none;
 }
 
-#preface {
-  display: none;
-}
-
 #tachistoscope {
+  display: none;
   #card {
     text-align: center;
   }
@@ -119,6 +116,7 @@ button {
 }
 
 footer {
+  display: none;
   margin-top: 1em;
   text-align: right;
 }

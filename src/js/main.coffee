@@ -17,7 +17,7 @@ Card = Backbone.Model.extend
 
 CardView = Backbone.View.extend
   template: _.template '
-    <div id="progress">Card <span class="cur">1</span>/<span class="total">10</span></div>
+    <div id="progress">Card <span class="cur"></span>/<span class="total">9</span></div>
     <div id="card">
       <img />
     </div>
@@ -83,6 +83,8 @@ CardView = Backbone.View.extend
     'click [data-value=unknown]': 'showNextIteration'
     'click [data-value=none]': 'showNextIteration'
     'click .card-opt': 'submit'
+    'click #start': 'start'
+    'click #show-first-card': 'showFirstCard'
 
   submit: (event) ->
     opt = $(event.target)
@@ -116,6 +118,8 @@ CardView = Backbone.View.extend
     interval = intervals[intervalIndex]
     console.info 'showing', @card, interval
 
+    @$el.find('.cur').text(@cardIndex + 1)
+
     unless interval
       @showNextCard()
       return
@@ -134,10 +138,23 @@ CardView = Backbone.View.extend
     setTimeout(ask, interval)
 
   render: ->
-    console.log @$el
     @$el.html(@template(@model.attributes))
+    @$preface = $('#preface')
+    @$intro = $('#intro')
 
     @startCard(0)
 
 $ ->
+  $preface = $('#preface')
+  $intro = $('#intro')
+  $tach = $('#tachistoscope')
+
+  $('#start').on 'click', ->
+    $preface.hide()
+    $intro.show()
+
+  $('#show-first-card').on 'click', ->
+    $intro.hide()
+    $tach.show()
+
   new CardView(el: $('#tachistoscope'), model: new Card(name: '5_spades'))
