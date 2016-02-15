@@ -24,7 +24,7 @@ button {
 
 .action {
   text-align: center;
-  button {
+  a {
     background: $darkblue;
     border: 1px solid $darkblue;
     border-radius: 3px;
@@ -32,15 +32,11 @@ button {
     padding: 0.5em 1em;
     font-size: 120%;
     outline: none;
+    text-decoration: none;
   }
 }
 
-#intro {
-  display: none;
-}
-
 #tachistoscope {
-  display: none;
   #card {
     text-align: center;
   }
@@ -101,7 +97,7 @@ button {
       color: $red;
     }
     .card-opt[data-suit="spades"] {
-      background-image: url('../images/spades.png');
+      background-image: url('/assets/images/spades.png');
     }
     .card-opt[data-suit="clubs"] {
       background-image: url('../images/clubs.png');

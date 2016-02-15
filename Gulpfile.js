@@ -1,17 +1,19 @@
 var gulp =      require('gulp'),
-  coffee =      require('gulp-coffee'),
   concat =      require('gulp-concat'),
+  cssnano =     require('gulp-cssnano'),
   del =         require('del'),
   livereload =  require('gulp-livereload'),
   npmfiles =    require('gulp-npm-files'),
   sass =        require('gulp-sass'),
   sourcemaps =  require('gulp-sourcemaps'),
-  uglify =      require('gulp-uglify');
+  ts =          require('gulp-typescript'),
+  tslint =      require('gulp-tslint'),
+  uglify =      require('gulp-uglify'),
+  project =     ts.createProject('tsconfig.json');
 
 gulp.task('default', ['clean'], function() {
-  gulp.start('build:all');
+  gulp.start(['build:app', 'build:vendor']);
 });
-gulp.task('build:all', ['build:app', 'build:vendor']);
 gulp.task('watch', function() {
   livereload.listen();
   gulp.start('watch-scss');
@@ -36,7 +38,7 @@ gulp.task('watch-scss', function() {
 });
 
 gulp.task('watch-scripts', function() {
-  gulp.watch('src/js/**/*.coffee', ['scripts']);
+  gulp.watch('src/js/**/*.ts', ['scripts']);
 });
 
 gulp.task('images', function() {
@@ -51,24 +53,31 @@ gulp.task('styles', function() {
   gulp.src('src/styles/**/*.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({ indentedSyntax: false, errLogToConsole: true }))
-    .pipe(gulp.dest('public/assets/styles'))
+    .pipe(gulp.dest('public/assets/css'))
     .pipe(livereload());
 });
 
 gulp.task('scripts', function() {
-  //gulp.src(npmfiles(), {base:'./'}).pipe(gulp.dest('public/assets/vendor'));
+  gulp.src(npmfiles(), {base:'./'}).pipe(gulp.dest('public/assets/vendor'));
 
-  gulp.src('src/js/*.coffee')
-    .pipe(coffee({bare: true}))
-    .pipe(gulp.dest('./public/assets/js'))
+  gulp.src('src/js/**/*.ts')
+    .pipe(sourcemaps.init())
+    .pipe(tslint())
+    .pipe(tslint.report("verbose", { emitError: false }))
+    .pipe(ts(project))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('public/assets/js'))
     .pipe(livereload());
 });
 
 gulp.task('vendor', function() {
   gulp.src([
-    'src/vendor/underscore.js',
-    'src/vendor/zepto.js',
-    'src/vendor/backbone.js'
+    'node_modules/systemjs/dist/system.js',
+    'node_modules/angular2/bundles/angular2-polyfills.js',
+    'node_modules/angular2/bundles/angular2.js',
+    'node_modules/angular2/bundles/http.js',
+    'node_modules/angular2/bundles/router.js',
+    'node_modules/rxjs/bundles/Rx.js',
   ])
     .pipe(sourcemaps.init())
     .pipe(concat('vendor.js'))
