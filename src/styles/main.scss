@@ -24,7 +24,7 @@ button {
 
 .action {
   text-align: center;
-  a {
+  a, button {
     background: $darkblue;
     border: 1px solid $darkblue;
     border-radius: 3px;
@@ -115,4 +115,17 @@ footer {
   display: none;
   margin-top: 1em;
   text-align: right;
+}
+
+.blurb {
+  font-size: 115%;
+  text-align: center;
+}
+
+countdown {
+  .remaining-seconds {
+    display: block;
+    font-size: 150%;
+    padding-top: 1em;
+  }
 }

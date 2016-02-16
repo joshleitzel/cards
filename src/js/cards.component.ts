@@ -1,15 +1,17 @@
 import {Component, OnInit} from "angular2/core";
 import {ExperimentService} from "./experiment.service";
 import {Card} from "./card";
+import {CountdownComponent} from "./countdown.component";
 
 @Component({
   template: `
     <div *ngIf="card" id="tachistoscope">
       <div id="progress">Card <span class="cur">{{cardIndex + 1}}</span>/<span class="total">{{cards.length}}</span></div>
-      <div *ngIf="displaying" id="card">
+      <countdown *ngIf="displayCountdown" (finished)="onCountdownFinished()"></countdown>
+      <div *ngIf="displayCard" id="card">
         <img src="assets/images/{{card.num}}_{{card.suit}}.svg" />
       </div>
-      <div *ngIf="!displaying && !completed" id="response">
+      <div *ngIf="displayResponse" id="response">
         <div class="prompt">Which card did you see?</div>
         <div class="option">
           <button (click)="answer('unknown')" data-value="unknown">I don\'t know</button>
@@ -62,12 +64,29 @@ import {Card} from "./card";
           <button (click)="answer('none')" data-value="none">None of the above</button>
         </div>
       </div>
-      <div *ngIf="completed">
+      <div *ngIf="message === 'incorrect'" class="blurb">
+        <p *ngIf="response === 'unknown'">OK, increasing exposure time.</p>
+        <p *ngIf="response !== 'unknown'">Sorry, that's not the correct card. We'll increase the exposure time.</p>
+        <div class="action"><button (click)="showNextInterval()">Try again</button></div>
+      </div>
+      <div *ngIf="message == 'correct'" class="blurb">
+        <p>That's correct!</p>
+        <div class="action"><button (click)="showNextCard()">Show next card</button></div>
+      </div>
+      <div *ngIf="message === 'nextCard'" class="blurb">
+        <p>OK, let's move on to the next card.</p>
+        <div class="action"><button (click)="showNextCard()">Show next card</button></div>
+      </div>
+      <div *ngIf="message === 'done'" class="blurb">
+        <p>You're done!</p>
+      </div>
+      <div *ngIf="completed" class="blurb">
         <p>You're done!</p>
       </div>
     </div>
   `,
-  providers: [ExperimentService]
+  providers: [ExperimentService],
+  directives: [CountdownComponent]
 })
 
 export class CardsComponent implements OnInit {
@@ -76,6 +95,11 @@ export class CardsComponent implements OnInit {
   public displaying: boolean;
   public cardIndex: number;
   public completed: boolean;
+  public displayCountdown: boolean;
+  public displayCard: boolean;
+  public displayResponse: boolean;
+  public response: any;
+  public message: any;
   private intervals: number[];
   private intervalIndex: number;
 
@@ -89,10 +113,10 @@ export class CardsComponent implements OnInit {
 
   showInterval(index) {
     let interval = this.intervals[index];
+    this.message = null;
     if (interval) {
-      this.displaying = true;
+      this.displayCountdown = true;
       this.intervalIndex = index;
-      setTimeout(() => this.displaying = false, interval);
     } else {
       this.showNextCard();
     }
@@ -118,15 +142,40 @@ export class CardsComponent implements OnInit {
     this.showCard(this.cardIndex + 1);
   }
 
+  showIncorrect() {
+    if (this.cardIndex === this.cards.length - 1) {
+      this.message = "done";
+    } else if (this.intervalIndex === this.intervals.length - 1) {
+      this.message = "nextCard";
+    } else {
+      this.message = "incorrect";
+    }
+  }
+
+  showCorrect() {
+    this.message = "correct";
+  }
+
   answer(response) {
+    this.displayResponse = false;
+    this.response = response;
     if (response === "unknown") {
-      this.showNextInterval();
+      this.showIncorrect();
     } else {
       if (response.suit === this.card.suit && response.num === this.card.num) {
-        this.showNextCard();
+        this.showCorrect();
       } else {
-        this.showNextInterval();
+        this.showIncorrect();
       }
     }
+  }
+
+  onCountdownFinished() {
+    this.displayCountdown = false;
+    this.displayCard = true;
+    setTimeout(() => {
+      this.displayCard = false;
+      this.displayResponse = true;
+    }, this.intervals[this.intervalIndex]);
   }
 }
