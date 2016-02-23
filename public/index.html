@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <title>Cards Experiment</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+
+  <script src="assets/js/vendor.js"></script>
+  <script type="text/javascript">
+    System.config({
+        baseURL: 'assets/js',
+        defaultJSExtensions: true,
+        transpiler: 'typescript',
+    });
+    System.paths['angular2/*'] = '/assets/vendor/node_modules/angular2/*.js';
+    System.paths['rxjs/*'] = '/assets/vendor/node_modules/rxjs/*.js';
+    System.import('bootstrap');
+  </script>
+
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <base href="/">
+  <app>Loading…</app>
+</body>
+</html>
