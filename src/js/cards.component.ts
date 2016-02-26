@@ -159,6 +159,9 @@ export class CardsComponent implements OnInit {
   answer(response) {
     this.displayResponse = false;
     this.response = response;
+    if (response === 'none') {
+      this.response = 'unknown';
+    }
     if (response === "unknown") {
       this.showIncorrect();
     } else {
@@ -168,6 +171,12 @@ export class CardsComponent implements OnInit {
         this.showIncorrect();
       }
     }
+    this._experimentService.recordResponse({
+      cardNum: this.cardIndex,
+      card: this.card,
+      response: response,
+      interval: this.intervals[this.intervalIndex],
+    });
   }
 
   onCountdownFinished() {

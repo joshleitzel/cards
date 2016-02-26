@@ -7,11 +7,13 @@ import {CardsComponent} from "./cards.component";
 @Component({
   selector: "app",
   template: `
-    <h1>Perception Tester</h1>
-    <router-outlet></router-outlet>
-    <footer>
-      <a href="#" id="credits">Credits</a>
-    </footer>
+    <div class="wrapper">
+      <h1>Perception Tester</h1>
+      <router-outlet></router-outlet>
+      <footer>
+        <a href="#" id="credits">Credits</a>
+      </footer>
+    </div>
   `,
   directives: [RouterOutlet]
 })

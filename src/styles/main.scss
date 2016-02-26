@@ -4,9 +4,15 @@ $red: #e61408;
 
 body {
   background: white;
-  font: 13px 'Lato';
+  font: 18px 'Lato';
   margin: 0 auto;
   width: 350px;
+}
+
+.loading {
+  font-size: 150%;
+  margin-top: 3em;
+  text-align: center;
 }
 
 h1 {
@@ -23,6 +29,7 @@ button {
 }
 
 .action {
+  margin-top: 3em;
   text-align: center;
   a, button {
     background: $darkblue;
@@ -84,6 +91,7 @@ button {
     }
     .card-opt {
       background: no-repeat right/15px;
+      color: #878787;
       font-weight: bold;
       font-size: 17px;
       padding-right: 17px;
@@ -93,20 +101,17 @@ button {
         margin-left: 1em;
       }
     }
-    .card-opt[data-suit="hearts"], .card-opt[data-suit="diamonds"] {
-      color: $red;
-    }
     .card-opt[data-suit="spades"] {
-      background-image: url('/assets/images/spades.png');
+      background-image: url('/assets/images/spades_gray.png');
     }
     .card-opt[data-suit="clubs"] {
-      background-image: url('../images/clubs.png');
+      background-image: url('../images/clubs_gray.png');
     }
     .card-opt[data-suit="hearts"] {
-      background-image: url('../images/hearts.png');
+      background-image: url('../images/hearts_gray.png');
     }
     .card-opt[data-suit="diamonds"] {
-      background-image: url('../images/diamonds.png');
+      background-image: url('../images/diamonds_gray.png');
     }
   }
 }

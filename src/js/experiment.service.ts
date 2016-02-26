@@ -1,7 +1,17 @@
 import {Injectable} from "angular2/core";
+import {Card} from "./card";
+
+interface Response {
+  card: Card,
+  interval: number,
+  cardNum: number,
+  response: any
+}
 
 @Injectable()
 export class ExperimentService {
+  private responses: Response[];
+
   getCards() {
     return [
       { num: "5", suit: "spades" },
@@ -51,5 +61,11 @@ export class ExperimentService {
       1000,
       1000
     ];
+  }
+
+  recordResponse(response) {
+    this.responses = this.responses || [];
+    this.responses.push(response);
+    console.log(this.responses);
   }
 }

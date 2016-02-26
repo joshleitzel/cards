@@ -18,6 +18,7 @@ gulp.task('watch', function() {
   livereload.listen();
   gulp.start('watch-scss');
   gulp.start('watch-scripts');
+  gulp.start('watch-images');
 });
 
 gulp.task('build:app', [
@@ -39,6 +40,10 @@ gulp.task('watch-scss', function() {
 
 gulp.task('watch-scripts', function() {
   gulp.watch('src/js/**/*.ts', ['scripts']);
+});
+
+gulp.task('watch-images', function() {
+  gulp.watch('src/images/**/', ['images']);
 });
 
 gulp.task('images', function() {
