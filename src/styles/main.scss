@@ -1,10 +1,11 @@
 $lightgray: #EDEDED;
 $darkblue: #28687D;
 $red: #e61408;
+$gray: #878787;
 
 body {
   background: white;
-  font: 18px 'Lato';
+  font: 16px 'Lato';
   margin: 0 auto;
   width: 350px;
 }
@@ -81,7 +82,7 @@ button {
       border: 1px solid lightgray;
       border-radius: 2px;
       font-size: 12px;
-      margin-top: 0.5em;
+      margin-top: 2em;
       padding: 0.3em 0.7em;
     }
     .card-group {
@@ -91,7 +92,7 @@ button {
     }
     .card-opt {
       background: no-repeat right/15px;
-      color: #878787;
+      color: $gray;
       font-weight: bold;
       font-size: 17px;
       padding-right: 17px;
@@ -132,5 +133,57 @@ countdown {
     display: block;
     font-size: 150%;
     padding-top: 1em;
+  }
+}
+
+.card-indicator {
+  background: no-repeat right/15px;
+  font-weight: bold;
+  font-size: 17px;
+  padding-right: 5px;
+  border-width: 0;
+  width: 35px;
+}
+
+#results {
+  ol {
+    border-top: 1px solid $lightgray;
+    font-size: 80%;
+    list-style-type: none;
+    padding: 0;
+    padding-top: 1em;
+  }
+
+  .card-num {
+    color: $gray;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .card-indicator {
+    display: inline-block;
+    margin-right: 10px;
+    width: 35px;
+    &[data-color="red"] {
+      color: $red;
+    }
+    &[data-suit="spades"] {
+      background-image: url('../images/spades.png');
+      &[data-color="red"] {
+        background-image: url('../images/spades_red.png');
+      }
+    }
+    &[data-suit="hearts"] {
+      background-image: url('../images/hearts.png');
+      &[data-color="black"] {
+        background-image: url('../images/hearts_black.png');
+      }
+    }
+  }
+
+  .outcome {
+    .interval {
+      font-weight: bold;
+    }
   }
 }

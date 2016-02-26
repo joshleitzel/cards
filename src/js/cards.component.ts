@@ -2,6 +2,7 @@ import {Component, OnInit} from "angular2/core";
 import {ExperimentService} from "./experiment.service";
 import {Card} from "./card";
 import {CountdownComponent} from "./countdown.component";
+import {Result} from "./result";
 
 @Component({
   template: `
@@ -64,24 +65,33 @@ import {CountdownComponent} from "./countdown.component";
           <button (click)="answer('none')" data-value="none">None of the above</button>
         </div>
       </div>
-      <div *ngIf="message === 'incorrect'" class="blurb">
-        <p *ngIf="response === 'unknown'">OK, increasing exposure time.</p>
-        <p *ngIf="response !== 'unknown'">Sorry, that's not the correct card. We'll increase the exposure time.</p>
-        <div class="action"><button (click)="showNextInterval()">Try again</button></div>
+      <div *ngIf="!completed">
+        <div *ngIf="message === 'incorrect'" class="blurb">
+          <p *ngIf="response === 'unknown'">OK, increasing exposure time.</p>
+          <p *ngIf="response !== 'unknown'">Sorry, that's not the correct card. We'll increase the exposure time.</p>
+          <div class="action"><button (click)="showNextInterval()">Try again</button></div>
+        </div>
+        <div *ngIf="message == 'correct'" class="blurb">
+          <p>That's correct!</p>
+          <div class="action"><button (click)="showNextCard()">Show next card</button></div>
+        </div>
+        <div *ngIf="message === 'nextCard'" class="blurb">
+          <p>OK, let's move on to the next card.</p>
+          <div class="action"><button (click)="showNextCard()">Show next card</button></div>
+        </div>
       </div>
-      <div *ngIf="message == 'correct'" class="blurb">
-        <p>That's correct!</p>
-        <div class="action"><button (click)="showNextCard()">Show next card</button></div>
-      </div>
-      <div *ngIf="message === 'nextCard'" class="blurb">
-        <p>OK, let's move on to the next card.</p>
-        <div class="action"><button (click)="showNextCard()">Show next card</button></div>
-      </div>
-      <div *ngIf="message === 'done'" class="blurb">
-        <p>You're done!</p>
-      </div>
-      <div *ngIf="completed" class="blurb">
-        <p>You're done!</p>
+      <div *ngIf="completed" class="blurb" id="results">
+        <p>You're done! Here's how you did:</p>
+        <ol>
+          <li *ngFor="#result of results; #num = index">
+            <span class="card-num">Card {{num + 1}}</span>
+            <span class="card-indicator" [attr.data-suit]="result.card.suit" [attr.data-num]="result.card.num" [attr.data-color]="result.card.color">{{result.card.num}}</span>
+            <span class="outcome">
+              <span *ngIf="result.correct">Answered correctly</span>
+              <span *ngIf="!result.correct">Failed to answer correctly</span>
+              after <span class="interval">{{result.interval}}ms</span></span>
+          </li>
+        </ol>
       </div>
     </div>
   `,
@@ -100,6 +110,7 @@ export class CardsComponent implements OnInit {
   public displayResponse: boolean;
   public response: any;
   public message: any;
+  public results: Result[];
   private intervals: number[];
   private intervalIndex: number;
 
@@ -134,6 +145,7 @@ export class CardsComponent implements OnInit {
 
       this.showInterval(0);
     } else {
+      this.getResults();
       this.completed = true;
     }
   }
@@ -143,10 +155,10 @@ export class CardsComponent implements OnInit {
   }
 
   showIncorrect() {
-    if (this.cardIndex === this.cards.length - 1) {
-      this.message = "done";
-    } else if (this.intervalIndex === this.intervals.length - 1) {
+    let reachedIntervalLimit = this.intervalIndex === this.intervals.length - 1;
+    if (reachedIntervalLimit) {
       this.message = "nextCard";
+      this.checkComplete();
     } else {
       this.message = "incorrect";
     }
@@ -154,6 +166,14 @@ export class CardsComponent implements OnInit {
 
   showCorrect() {
     this.message = "correct";
+    this.checkComplete();
+  }
+
+  checkComplete() {
+    if (!this.cards[this.cardIndex + 1]) {
+      this.getResults();
+      this.completed = true;
+    }
   }
 
   answer(response) {
@@ -162,6 +182,11 @@ export class CardsComponent implements OnInit {
     if (response === 'none') {
       this.response = 'unknown';
     }
+    this._experimentService.recordResponse(this.cardIndex, {
+      card: this.card,
+      response: response,
+      interval: this.intervals[this.intervalIndex],
+    });
     if (response === "unknown") {
       this.showIncorrect();
     } else {
@@ -171,12 +196,10 @@ export class CardsComponent implements OnInit {
         this.showIncorrect();
       }
     }
-    this._experimentService.recordResponse({
-      cardNum: this.cardIndex,
-      card: this.card,
-      response: response,
-      interval: this.intervals[this.intervalIndex],
-    });
+  }
+
+  getResults() {
+    this.results = this._experimentService.getResults();
   }
 
   onCountdownFinished() {
