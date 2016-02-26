@@ -10,7 +10,7 @@ import {Result} from "./result";
       <div id="progress">Card <span class="cur">{{cardIndex + 1}}</span>/<span class="total">{{cards.length}}</span></div>
       <countdown *ngIf="displayCountdown" (finished)="onCountdownFinished()"></countdown>
       <div *ngIf="displayCard" id="card">
-        <img src="assets/images/{{card.num}}_{{card.suit}}.svg" />
+        <img src="assets/images/{{card.num}}_{{card.suit}}_{{card.color}}.svg" />
       </div>
       <div *ngIf="displayResponse" id="response">
         <div class="prompt">Which card did you see?</div>
@@ -124,6 +124,7 @@ export class CardsComponent implements OnInit {
 
   showInterval(index) {
     let interval = this.intervals[index];
+    console.log('showing', this.cardIndex, interval);
     this.message = null;
     if (interval) {
       this.displayCountdown = true;

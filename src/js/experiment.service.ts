@@ -9,7 +9,6 @@ interface Response {
   response: any
 }
 
-
 @Injectable()
 export class ExperimentService {
   private responses: Response[];
@@ -18,7 +17,7 @@ export class ExperimentService {
   getCards() {
     return [
       { num: "5", suit: "spades", real: true, color: 'black' },
-      { num: "4", suit: "hearts", real: false, color: 'black' },
+      { num: "4", suit: "hearts", real: false, color: 'red' },
       { num: "6", suit: "spades", real: false, color: 'red' },
       { num: "ace", suit: "diamonds", real: false, color: 'black' },
       { num: "3", suit: "hearts", real: false, color: 'black' },
@@ -32,36 +31,20 @@ export class ExperimentService {
   getIntervals() {
     return [
       30,
-      30,
-      50,
       50,
       70,
-      70,
-      100,
       100,
       150,
-      150,
-      200,
       200,
       250,
-      250,
-      300,
       300,
       400,
-      400,
-      450,
       450,
       500,
-      500,
-      600,
       600,
       700,
-      700,
-      800,
       800,
       900,
-      900,
-      1000,
       1000
     ];
   }
