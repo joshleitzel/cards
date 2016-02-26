@@ -13,19 +13,40 @@ interface Response {
 export class ExperimentService {
   private responses: Response[];
   private results: Result[];
+  private numCards = 5;
+
+  private cards = [
+    { num: "2", suit: "spades", real: true, color: 'black' },
+    { num: "3", suit: "hearts", real: true, color: 'red' },
+    { num: "4", suit: "hearts", real: true, color: 'red' },
+    { num: "5", suit: "hearts", real: true, color: 'red' },
+    { num: "5", suit: "spades", real: true, color: 'black' },
+    { num: "6", suit: "clubs", real: true, color: 'black' },
+    { num: "6", suit: "spades", real: true, color: 'black' },
+    { num: "7", suit: "spades", real: true, color: 'black' },
+    { num: "ace", suit: "diamonds", real: true, color: 'red' },
+    { num: "ace", suit: "hearts", real: true, color: 'red' },
+    { num: "3", suit: "hearts", real: false, color: 'black' },
+    { num: "4", suit: "hearts", real: false, color: 'black' },
+    { num: "5", suit: "hearts", real: false, color: 'black' },
+    { num: "ace", suit: "hearts", real: false, color: 'black' },
+    { num: "ace", suit: "diamonds", real: false, color: 'black' },
+    { num: "2", suit: "spades", real: false, color: 'red' },
+    { num: "6", suit: "clubs", real: false, color: 'red' }
+  ];
 
   getCards() {
-    return [
-      { num: "5", suit: "spades", real: true, color: 'black' },
-      { num: "4", suit: "hearts", real: false, color: 'red' },
-      { num: "6", suit: "spades", real: false, color: 'red' },
-      { num: "ace", suit: "diamonds", real: false, color: 'black' },
-      { num: "3", suit: "hearts", real: false, color: 'black' },
-      { num: "5", suit: "hearts", real: true, color: 'red' },
-      { num: "6", suit: "clubs", real: false, color: 'red' },
-      { num: "7", suit: "spades", real: true, color: 'black' },
-      { num: "ace", suit: "hearts", real: true, color: 'red' }
-    ];
+    function getRandomItem(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    var selectedCards = [];
+    let realCards = this.cards.filter((item) => { return item.real });
+    let fakeCards = this.cards.filter((item) => { return !item.real });
+
+    var card = getRandomItem(realCards)
+
+    return this.cards;
   }
 
   getIntervals() {
